@@ -1,0 +1,72 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "BBCode Editor",
+  "version": "0.1.0",
+  "identifier": "de.i42.bbcode-editor",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "BBCode Editor",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 720,
+        "minHeight": 480
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: asset: http://asset.localhost; font-src 'self' data:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com; child-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["**"]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "DeveloperTool",
+    "shortDescription": "Cross-platform BBCode editor (IP.Board dialect)",
+    "fileAssociations": [
+      {
+        "ext": ["bbcode", "bb", "txt"],
+        "name": "BBCode Document",
+        "description": "BBCode forum markup document",
+        "mimeType": "text/x-bbcode",
+        "role": "Editor",
+        "rank": "Owner"
+      }
+    ],
+    "resources": {
+      "icons/bbcode-document.icns": "bbcode-document.icns",
+      "icons/bbcode-document.ico": "bbcode-document.ico"
+    },
+    "windows": {
+      "nsis": {
+        "installerHooks": "windows/installer-hooks.nsh"
+      }
+    },
+    "linux": {
+      "deb": {
+        "files": {
+          "/usr/share/icons/hicolor/scalable/mimetypes/text-x-bbcode.svg": "icons/bbcode-document.svg",
+          "/usr/share/icons/hicolor/256x256/mimetypes/text-x-bbcode.png": "icons/bbcode-document-256.png",
+          "/usr/share/mime/packages/bbcode-editor.xml": "linux/bbcode.xml"
+        },
+        "postInstallScript": "linux/deb-postinst.sh"
+      }
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

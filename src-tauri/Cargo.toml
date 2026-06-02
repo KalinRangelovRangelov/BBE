@@ -1,0 +1,34 @@
+[package]
+name = "bbcode-editor"
+version = "0.1.0"
+description = "Cross-platform BBCode editor (IP.Board dialect)"
+authors = ["i42"]
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "bbcode_editor_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["protocol-asset"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# macOS routes file-association opens to the single Launch-Services instance
+# via RunEvent::Opened; the single-instance plugin breaks that, so it is
+# compiled for Windows/Linux only.
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+tauri-plugin-single-instance = "2"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
