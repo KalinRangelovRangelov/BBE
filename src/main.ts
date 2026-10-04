@@ -2,6 +2,7 @@ import "./styles.css";
 import { Editor } from "./editor";
 import { renderBBCode, setCodeTheme, type Theme } from "./preview";
 import { TabManager, isDirty } from "./tabs";
+import { icon, type IconName } from "./icons";
 import { toolbar, palette, type LibraryItem } from "./library";
 import { toggleColorPicker } from "./colorpicker";
 import { toggleSizePicker } from "./sizepicker";
@@ -52,8 +53,10 @@ function applyTheme(t: Theme) {
   setCodeTheme(t);
   localStorage.setItem("bbe-theme", t);
   if (themeBtn) {
-    themeBtn.textContent = t === "dark" ? "☀ Light" : "☾ Dark";
-    themeBtn.title = t === "dark" ? "Switch to light theme" : "Switch to dark theme";
+    themeBtn.replaceChildren(icon(t === "dark" ? "light_mode" : "dark_mode"));
+    const title = t === "dark" ? "Switch to light theme" : "Switch to dark theme";
+    themeBtn.title = title;
+    themeBtn.setAttribute("aria-label", title);
   }
 }
 
@@ -86,7 +89,9 @@ function renderTabs() {
     name.textContent = t.name;
     const close = document.createElement("button");
     close.className = "close";
-    close.textContent = "×";
+    close.appendChild(icon("close"));
+    close.title = "Close";
+    close.setAttribute("aria-label", "Close");
     close.onclick = (e) => {
       e.stopPropagation();
       closeTab(t.id);
@@ -98,8 +103,9 @@ function renderTabs() {
   }
   const add = document.createElement("button");
   add.className = "new-tab";
-  add.textContent = "+";
+  add.appendChild(icon("add"));
   add.title = "New document";
+  add.setAttribute("aria-label", "New document");
   add.onclick = () => {
     tabs.newTab();
     editor.setDoc("");
@@ -141,20 +147,23 @@ function bindItem(b: HTMLButtonElement, item: LibraryItem) {
 function buildToolbar() {
   for (const item of toolbar) {
     const b = document.createElement("button");
-    b.textContent = item.label;
+    b.className = "icon-btn";
+    if (item.icon) b.appendChild(icon(item.icon));
+    else b.textContent = item.label;
     b.title = item.hint ?? item.label;
+    b.setAttribute("aria-label", b.title);
     bindItem(b, item);
     toolbarEl.appendChild(b);
   }
 
-  toolbarEl.append(sep(), iconBtn("📂 Open", openFile), iconBtn("💾 Save", () => saveFile(false)),
-    iconBtn("Save As", () => saveFile(true)));
+  toolbarEl.append(sep(), iconBtn("folder_open", "Open", openFile),
+    iconBtn("save", "Save", () => saveFile(false)), iconBtn("save_as", "Save As", () => saveFile(true)));
 
   const spacer = document.createElement("div");
   spacer.className = "spacer";
   toolbarEl.appendChild(spacer);
 
-  toolbarEl.appendChild(iconBtn("☰ Library", () => {
+  toolbarEl.appendChild(iconBtn("side_navigation", "Library", () => {
     paletteVisible = !paletteVisible;
     paletteEl.classList.toggle("hidden", !paletteVisible);
   }));
@@ -171,7 +180,7 @@ function buildToolbar() {
   toolbarEl.appendChild(seg);
 
   // Theme toggle, pinned to the top-right end of the toolbar.
-  themeBtn = iconBtn("", () => applyTheme(theme === "dark" ? "light" : "dark"));
+  themeBtn = iconBtn("light_mode", "Switch to light theme", () => applyTheme(theme === "dark" ? "light" : "dark"));
   toolbarEl.appendChild(themeBtn);
 
   setMode(mode);
@@ -182,9 +191,12 @@ function sep() {
   s.className = "sep";
   return s;
 }
-function iconBtn(label: string, onClick: () => void) {
+function iconBtn(name: IconName, title: string, onClick: () => void) {
   const b = document.createElement("button");
-  b.textContent = label;
+  b.className = "icon-btn";
+  b.appendChild(icon(name));
+  b.title = title;
+  b.setAttribute("aria-label", title);
   b.onclick = onClick;
   return b;
 }

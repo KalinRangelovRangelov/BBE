@@ -1,7 +1,10 @@
 import type { SnippetSpec } from "./editor";
+import type { IconName } from "./icons";
 
 export interface LibraryItem {
   label: string;
+  /** Toolbar glyph; the toolbar falls back to `label` text when omitted. */
+  icon?: IconName;
   hint?: string;
   /** A snippet to insert, OR omitted when the item opens a `widget` instead. */
   spec?: SnippetSpec;
@@ -11,18 +14,18 @@ export interface LibraryItem {
 
 /** Compact toolbar: the most frequently used inline/block tags. */
 export const toolbar: LibraryItem[] = [
-  { label: "B", hint: "Bold", spec: { insert: "[b]$[/b]", wrap: { prefix: "[b]", suffix: "[/b]" } } },
-  { label: "i", hint: "Italic", spec: { insert: "[i]$[/i]", wrap: { prefix: "[i]", suffix: "[/i]" } } },
-  { label: "U", hint: "Underline", spec: { insert: "[u]$[/u]", wrap: { prefix: "[u]", suffix: "[/u]" } } },
-  { label: "S̶", hint: "Strikethrough", spec: { insert: "[s]$[/s]", wrap: { prefix: "[s]", suffix: "[/s]" } } },
-  { label: "🎨 Color", hint: "Text color", widget: "color" },
-  { label: "A↕ Size", hint: "Font size (1–7)", widget: "size" },
-  { label: "🙂 Emote", hint: "Emoticons", widget: "emoji" },
-  { label: "“ ”", hint: "Quote", spec: { insert: "[quote]$[/quote]", wrap: { prefix: "[quote]", suffix: "[/quote]" }, block: true } },
-  { label: "• List", hint: "Bulleted list", spec: { insert: "[list]\n[*]$\n[*]\n[/list]", block: true } },
-  { label: "🔗", hint: "Link", spec: { insert: "[url=https://]$[/url]", wrap: { prefix: "[url=https://]", suffix: "[/url]" } } },
-  { label: "🖼", hint: "Image", spec: { insert: "[img]$[/img]", wrap: { prefix: "[img]", suffix: "[/img]" } } },
-  { label: "</>", hint: "Code", spec: { insert: "[code]$[/code]", wrap: { prefix: "[code]", suffix: "[/code]" }, block: true } },
+  { label: "Bold", icon: "format_bold", hint: "Bold", spec: { insert: "[b]$[/b]", wrap: { prefix: "[b]", suffix: "[/b]" } } },
+  { label: "Italic", icon: "format_italic", hint: "Italic", spec: { insert: "[i]$[/i]", wrap: { prefix: "[i]", suffix: "[/i]" } } },
+  { label: "Underline", icon: "format_underlined", hint: "Underline", spec: { insert: "[u]$[/u]", wrap: { prefix: "[u]", suffix: "[/u]" } } },
+  { label: "Strikethrough", icon: "format_strikethrough", hint: "Strikethrough", spec: { insert: "[s]$[/s]", wrap: { prefix: "[s]", suffix: "[/s]" } } },
+  { label: "Color", icon: "format_color_text", hint: "Text color", widget: "color" },
+  { label: "Size", icon: "format_size", hint: "Font size (1–7)", widget: "size" },
+  { label: "Emoticons", icon: "sentiment_satisfied", hint: "Emoticons", widget: "emoji" },
+  { label: "Quote", icon: "format_quote", hint: "Quote", spec: { insert: "[quote]$[/quote]", wrap: { prefix: "[quote]", suffix: "[/quote]" }, block: true } },
+  { label: "List", icon: "format_list_bulleted", hint: "Bulleted list", spec: { insert: "[list]\n[*]$\n[*]\n[/list]", block: true } },
+  { label: "Link", icon: "link", hint: "Link", spec: { insert: "[url=https://]$[/url]", wrap: { prefix: "[url=https://]", suffix: "[/url]" } } },
+  { label: "Image", icon: "image", hint: "Image", spec: { insert: "[img]$[/img]", wrap: { prefix: "[img]", suffix: "[/img]" } } },
+  { label: "Code", icon: "code", hint: "Code", spec: { insert: "[code]$[/code]", wrap: { prefix: "[code]", suffix: "[/code]" }, block: true } },
 ];
 
 /** Full browsable palette covering the IP.Board BBCode set. */
